@@ -31,7 +31,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const App = () => {
   const [selectedId, setSelectedId] = useState(null);
-  const [currentSection, setCurrentSection] = useState('home');
+  const [currentSection, setCurrentSection] = useState(() => {
+    // This allows the website to load the correct section directly from the URL (e.g., /about)
+    const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
+    const validSections = ['home', 'recent work', 'watch tv', 'interactive', 'music videos', 'vhs multitracking', 'still', 'about'];
+    const found = validSections.find(s => s.replace(/\s+/g, '') === path);
+    return found || 'home';
+  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const activeProject = projects.find(p => p.id === selectedId);
 
@@ -45,11 +51,18 @@ const App = () => {
     }
   }, []);
 
-  // Update document title based on current section
+  // Update document title and the browser's address bar based on current section
   React.useEffect(() => {
     const baseUrl = 'alreadystillagain.com'; // Assuming this is your base domain
-    const pathSegment = currentSection === 'home' ? '' : `/${currentSection.toLowerCase().replace(/\s+/g, '')}`;
+    const slug = currentSection === 'home' ? '' : currentSection.toLowerCase().replace(/\s+/g, '');
+    const pathSegment = slug ? `/${slug}` : '';
+    
     document.title = `${baseUrl}${pathSegment}`;
+    
+    // This ensures the URL in the browser bar updates (e.g., to /about) without a page refresh
+    if (window.location.pathname !== (pathSegment || '/')) {
+      window.history.pushState(null, '', pathSegment || '/');
+    }
   }, [currentSection]);
 
   return (

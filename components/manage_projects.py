@@ -78,7 +78,7 @@ class ProjectManager:
 
         # Page Visibility
         ttk.Label(right_frame, text="Show on Pages:").pack(anchor=tk.W)
-        self.page_options = ["home", "recent work", "vhs multitracking", "still", "music videos", "music", "watch tv", "interactive"]
+        self.page_options = ["home", "recent work", "watch tv", "interactive", "music videos", "vhs multitracking", "still"]
         self.page_vars = {page: tk.BooleanVar() for page in self.page_options}
         page_frame = ttk.Frame(right_frame)
         page_frame.pack(fill=tk.X, pady=(0, 15))
@@ -237,14 +237,14 @@ class ProjectManager:
             
             public_dir = os.path.join(BASE_DIR, "public")
             if local_media_source and local_media_source.startswith(public_dir):
-                processed_media_url = local_media_source.replace(public_dir, "").replace("\\", "/")
+                processed_media_url = local_media_source.replace(public_dir, "").replace("\\", "/").lstrip("/")
             elif local_media_source and not local_media_source.startswith('http'):
                 # Local file outside the project - copy it to assets
                 base = os.path.basename(local_media_source)
                 target = os.path.join(ASSETS_DIR, base)
                 if local_media_source != target:
                     shutil.copy(local_media_source, target)
-                processed_media_url = f"/assets/{base}"
+                processed_media_url = f"assets/{base}"
                 local_media_source = target # Use the local copy as the thumb source
 
             # --- Determine Thumbnail Source ---
@@ -298,9 +298,9 @@ class ProjectManager:
                     img = img.resize((300, 300), Image.LANCZOS)
                     img.save(thumb_dest)
 
-                final_thumb_url = f"/assets/{thumb_name}"
+                final_thumb_url = f"assets/{thumb_name}"
                 if m_type == "image":
-                    final_full_url = f"/assets/{base_name}"
+                    final_full_url = f"assets/{base_name}"
             elif self.editing_index is not None:
                 existing = self.projects[self.editing_index]
                 final_thumb_url = existing.get('thumbnail', '')

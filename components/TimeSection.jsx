@@ -44,7 +44,7 @@ const TimeSection = ({ projects, onProjectSelect }) => {
     Composite.add(world, mouseConstraint);
 
     // Use a custom low-res image for the cursor (hotspot set to center 32 32)
-    const customCursor = 'url("/assets/eye-cursor.png") 32 32, pointer';
+    const customCursor = `url("${import.meta.env.BASE_URL}assets/eye-cursor.png") 32 32, pointer`;
 
     // Change cursor to pointer when hovering over a project icon
     Events.on(mouseConstraint, 'mousemove', (event) => {

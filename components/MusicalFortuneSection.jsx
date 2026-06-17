@@ -103,7 +103,7 @@ const MusicTelevisionSection = ({ projects }) => {
 
         {/* Mask Layer */}
         <img 
-          src="/assets/tv.png" 
+          src={`${import.meta.env.BASE_URL}assets/tv.png`}
           alt="TV Mask" 
           style={{ 
             position: 'absolute', 

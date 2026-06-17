@@ -1,5 +1,24 @@
 import React, { useState, useCallback } from 'react';
-import { projects } from './projects.js';
+import { projects as rawProjects } from './projects.js';
+
+// Helper to fix asset paths for GitHub Pages sub-directory hosting
+const fixPath = (p) => {
+  if (!p || typeof p !== 'string' || p.startsWith('http') || p.startsWith('https') || p.startsWith('//') || p.startsWith('data:')) return p;
+  const cleanPath = p.startsWith('/') ? p.slice(1) : p;
+  // If we are on a custom domain, BASE_URL is usually just "/"
+  const base = import.meta.env.BASE_URL || '/';
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+  return `${normalizedBase}${cleanPath}`;
+};
+
+const projects = rawProjects.map(p => ({
+  ...p,
+  thumbnail: fixPath(p.thumbnail),
+  imageUrl: fixPath(p.imageUrl),
+  audioUrl: fixPath(p.audioUrl),
+  linkUrl: fixPath(p.linkUrl),
+}));
+
 import RecentWorkSection from './RecentWorkSection.jsx';
 import HomeSection from './HomeSection.jsx';
 import InteractiveSection from './InteractiveSection.jsx';
@@ -26,6 +45,13 @@ const App = () => {
     }
   }, []);
 
+  // Update document title based on current section
+  React.useEffect(() => {
+    const baseUrl = 'alreadystillagain.com'; // Assuming this is your base domain
+    const pathSegment = currentSection === 'home' ? '' : `/${currentSection.replace(/\s+/g, '')}`;
+    document.title = `${baseUrl}${pathSegment}`;
+  }, [currentSection]);
+
   return (
     <div className="relative overflow-hidden font-sans" style={{ backgroundColor: 'white', minHeight: '100vh' }}>
       {/* Global Navigation Bar */}
@@ -43,11 +69,18 @@ const App = () => {
           alignItems: 'center'
         }}
       >
-        <h1 style={{ color: 'white', fontSize: '18px', fontWeight: '300', letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0 }}>
-          {currentSection === 'about' ? (
-            <>Who is <span style={{ fontWeight: '900' }}>Sean Olmstead</span>?</>
-          ) : (
+        <h1 
+          onClick={() => setCurrentSection('home')}
+          style={{ 
+            color: 'white', fontSize: '18px', fontWeight: '300', letterSpacing: '0.1em', 
+            textTransform: 'uppercase', margin: 0, 
+            cursor: 'pointer',
+            userSelect: 'none'
+          }}>
+          {currentSection === 'home' ? (
             <><span style={{ fontWeight: '900' }}>Already Still Again</span> <span style={{ textTransform: 'lowercase' }}>the art of</span> <span style={{ fontWeight: '900' }}>Sean Olmstead</span></>
+          ) : (
+            currentSection.replace(/ /g, '').toUpperCase()
           )}
         </h1>
         
@@ -92,7 +125,7 @@ const App = () => {
                   borderTop: '1px solid rgba(255,255,255,0.1)'
                 }}
               >
-                {['home', 'recent work', 'vhs multitracking', 'still', 'music videos', 'music', 'watch tv', 'interactive', 'about'].map((section) => (
+                {['home', 'recent work', 'watch tv', 'interactive', 'music videos', 'vhs multitracking', 'still', 'about'].map((section) => (
                   <button
                     key={section}
                     onClick={() => {
@@ -148,7 +181,7 @@ const App = () => {
         {currentSection === 'interactive' && (
           <InteractiveSection projects={projects} onProjectSelect={handleProjectSelect} />
         )}
-        {!['home', 'recent work', 'vhs multitracking', 'still', 'music videos', 'watch tv', 'interactive', 'about'].includes(currentSection) && (
+        {!['home', 'recent work', 'watch tv', 'interactive', 'music videos', 'vhs multitracking', 'still', 'about'].includes(currentSection) && (
           <div style={{ padding: '100px 40px', backgroundColor: 'white', minHeight: 'calc(100vh - 50px)' }}>
             <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
               <h2 style={{ fontWeight: '300', textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '24px' }}>{currentSection}</h2>

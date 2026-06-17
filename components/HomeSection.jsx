@@ -10,7 +10,7 @@ const HomeSection = ({ projects, onProjectSelect }) => {
       audioRef.current.currentTime = 0;
     } else {
       if (!audioRef.current) {
-        audioRef.current = new Audio('/assets/statement.mp3');
+        audioRef.current = new Audio(`${import.meta.env.BASE_URL}assets/statement.mp3`);
       }
       audioRef.current.play();
     }
@@ -56,7 +56,7 @@ const HomeSection = ({ projects, onProjectSelect }) => {
       </div>
 
         <img 
-          src="/assets/pinksean.gif" 
+          src={`${import.meta.env.BASE_URL}assets/pinksean.gif`}
           alt="alreadystillagain" 
           onClick={playStatement}
           style={{ 

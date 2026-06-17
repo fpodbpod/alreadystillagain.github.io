@@ -63,13 +63,13 @@ export const projects = [
     pages: ["space", "music videos"]
   },
   {
-    id: "https://ahhhhhhh-68id.onrender.com/",
+    id: "the-endless-ahhhhhhh",
     type: "link",
     title: "The Endless Ahhhhhhh",
-    thumbnail: "/assets/Screenshot 2026-06-15 at 7.36.04 PM.png",
+    thumbnail: "/assets/thumb_endlessahhhhhhh.jpeg",
     linkUrl: "https://ahhhhhhh-68id.onrender.com/",
     description: "A collaborative sound piece, in which users add their voice to a looping, endless ahhhhhhh.",
-    pages: ["space", "interactive"]
+    pages: ["interactive"]
   },
   {
     id: "boombox-for-the-moon",
@@ -81,13 +81,13 @@ export const projects = [
     pages: ["home", "recent work", "still"]
   },
   {
-    id: "/assets/videosynth.html",
+    id: "video-synthesizer-1",
     type: "link",
     title: "Video Synthesizer 1",
-    thumbnail: "/assets/Screenshot 2026-06-15 at 7.17.31 PM.png",
+    thumbnail: "/assets/thumb_videosynth.jpeg",
     linkUrl: "/assets/videosynth.html",
     description: "A browser based video synthesizer.",
-    pages: ["space", "interactive"]
+    pages: ["interactive"]
   },
   {
     id: "1201661858",

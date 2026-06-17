@@ -30,7 +30,7 @@ const AboutSection = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <a 
-                href="/assets/statement.pdf" 
+                href={`${import.meta.env.BASE_URL}assets/statement.pdf`}
                 target="_blank" 
                 rel="noopener noreferrer" 
                 style={{ textDecoration: 'none', color: 'black', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
@@ -45,7 +45,7 @@ const AboutSection = () => {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
               <button 
-                onClick={() => handleHear('/assets/statement.mp3')}
+                onClick={() => handleHear(`${import.meta.env.BASE_URL}assets/statement.mp3`)}
                 style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
               >
                 <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', lineHeight: '1.5' }}>
@@ -55,7 +55,7 @@ const AboutSection = () => {
                   hear
                 </span>
               </button>
-              {activeAudio === '/assets/statement.mp3' && (
+              {activeAudio?.includes('statement.mp3') && (
                 <audio key={activeAudio} controls autoPlay style={{ height: '32px' }}>
                   <source src={activeAudio} type="audio/mpeg" />
                   Your browser does not support the audio element.
@@ -79,7 +79,7 @@ const AboutSection = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <a 
-                href="/assets/cv.pdf" 
+                href={`${import.meta.env.BASE_URL}assets/cv.pdf`}
                 target="_blank" 
                 rel="noopener noreferrer" 
                 style={{ textDecoration: 'none', color: 'black', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
@@ -94,7 +94,7 @@ const AboutSection = () => {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
               <button 
-                onClick={() => handleHear('/assets/cv.mp3')}
+                onClick={() => handleHear(`${import.meta.env.BASE_URL}assets/cv.mp3`)}
                 style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
               >
                 <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', lineHeight: '1.5' }}>
@@ -104,7 +104,7 @@ const AboutSection = () => {
                   hear
                 </span>
               </button>
-              {activeAudio === '/assets/cv.mp3' && (
+              {activeAudio?.includes('cv.mp3') && (
                 <audio key={activeAudio} controls autoPlay style={{ height: '32px' }}>
                   <source src={activeAudio} type="audio/mpeg" />
                   Your browser does not support the audio element.

@@ -28,7 +28,8 @@ const HomeSection = ({ projects, onProjectSelect }) => {
       {/* Top Hero Section */}
       <div style={{ position: 'relative', height: 'calc(100vh - 50px)', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
         {/* Instructional Overlay */}
-        <div 
+        <div
+          className="home-hero-hint"
           style={{ 
             position: 'absolute', 
             top: '144px', 

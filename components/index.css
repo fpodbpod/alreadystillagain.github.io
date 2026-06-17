@@ -7,3 +7,50 @@ body {
   background: white; 
   font-family: 'Helvetica', 'Arial', sans-serif;
 }
+
+.mobile-title-break {
+  display: none;
+}
+
+.desktop-title-space {
+  display: inline;
+}
+
+.site-title-credit {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .site-header {
+    padding: 10px 14px !important;
+  }
+
+  .site-title {
+    font-size: 13px !important;
+    line-height: 1.3;
+    letter-spacing: 0.08em !important;
+    max-width: calc(100vw - 104px);
+    min-width: 0;
+  }
+
+  .mobile-title-break {
+    display: block;
+  }
+
+  .desktop-title-space {
+    display: none;
+  }
+
+  .site-title-credit {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .home-hero-hint {
+    top: 164px !important;
+    left: 12px !important;
+    font-size: 9px !important;
+    letter-spacing: 0.14em !important;
+    gap: 7px !important;
+  }
+}

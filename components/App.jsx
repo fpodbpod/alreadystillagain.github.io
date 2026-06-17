@@ -68,7 +68,8 @@ const App = () => {
   return (
     <div className="relative overflow-hidden font-sans" style={{ backgroundColor: 'white', minHeight: '100vh' }}>
       {/* Global Navigation Bar */}
-      <div 
+      <div
+        className="site-header"
         style={{ 
           position: 'fixed', 
           top: 0, 
@@ -83,7 +84,8 @@ const App = () => {
           alignItems: 'center'
         }}
       >
-        <h1 
+        <h1
+          className="site-title"
           onClick={() => setCurrentSection('home')}
           style={{ 
             color: 'white', fontSize: '18px', fontWeight: '300', letterSpacing: '0.1em', 
@@ -91,11 +93,12 @@ const App = () => {
             cursor: 'pointer',
             userSelect: 'none'
           }}>
-          {currentSection === 'home' ? (
-            <><span style={{ fontWeight: '900' }}>Already Still Again</span> <span style={{ textTransform: 'lowercase' }}>the art of</span> <span style={{ fontWeight: '900' }}>Sean Olmstead</span></>
-          ) : (
-            currentSection.replace(/ /g, '').toUpperCase()
-          )}
+          <span style={{ fontWeight: '900' }}>Already Still Again</span>
+          <span className="desktop-title-space"> </span>
+          <br className="mobile-title-break" />
+          <span className="site-title-credit">
+            <span style={{ textTransform: 'lowercase' }}>the art of</span> <span style={{ fontWeight: '900' }}>Sean Olmstead</span>
+          </span>
         </h1>
         
         <nav style={{ position: 'relative' }}>

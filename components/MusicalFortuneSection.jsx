@@ -64,10 +64,10 @@ const MusicTelevisionSection = ({ projects }) => {
       overflow: 'hidden'
     }}>
       {/* TV Frame Container */}
-      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div className="watch-tv-frame" style={{ position: 'relative', width: '100%', height: '100%' }}>
         
         {/* Video Layer (Sits behind the mask) */}
-        <div style={{ 
+        <div className="watch-tv-video-layer" style={{ 
           position: 'absolute', 
           top: 'calc(12.2% - 50px)', 
           left: '13%', 
@@ -102,7 +102,8 @@ const MusicTelevisionSection = ({ projects }) => {
         </div>
 
         {/* Mask Layer */}
-        <img 
+        <img
+          className="watch-tv-mask"
           src={`${import.meta.env.BASE_URL}assets/tv.png`}
           alt="TV Mask" 
           style={{ 
@@ -117,7 +118,7 @@ const MusicTelevisionSection = ({ projects }) => {
         />
 
         {/* Green TV Controls - Now overlaid on the frame */}
-        <div style={{ 
+        <div className="watch-tv-controls" style={{ 
           position: 'absolute',
           bottom: 'calc(8% + 15px)',
           left: 'calc(50% - 50px)',

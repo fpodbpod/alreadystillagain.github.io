@@ -47,10 +47,27 @@ body {
   }
 
   .home-hero-hint {
-    top: 164px !important;
+    top: 184px !important;
     left: 12px !important;
-    font-size: 9px !important;
+    font-size: 8px !important;
     letter-spacing: 0.14em !important;
     gap: 7px !important;
+  }
+
+  .watch-tv-frame {
+    width: 100vw !important;
+    height: auto !important;
+    aspect-ratio: 4 / 3;
+    max-height: calc(100vh - 50px);
+  }
+
+  .watch-tv-video-layer {
+    top: 12.2% !important;
+  }
+
+  .watch-tv-mask {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
   }
 }

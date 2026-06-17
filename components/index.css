@@ -55,19 +55,27 @@ body {
   }
 
   .watch-tv-frame {
-    width: 100vw !important;
+    width: 125vw !important;
     height: auto !important;
     aspect-ratio: 4 / 3;
     max-height: calc(100vh - 50px);
   }
 
   .watch-tv-video-layer {
-    top: 12.2% !important;
+    top: calc(3.6% - 20px) !important;
+    left: 4.4% !important;
+    width: 86% !important;
+    height: 85.75% !important;
   }
 
   .watch-tv-mask {
     width: 100% !important;
     height: 100% !important;
     object-fit: contain;
+  }
+
+  .watch-tv-controls {
+    left: 50% !important;
+    transform: translateX(-50%) scale(0.85) !important;
   }
 }

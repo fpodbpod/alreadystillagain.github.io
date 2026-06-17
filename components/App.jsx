@@ -74,6 +74,7 @@ const App = () => {
           top: 0, 
           left: 0, 
           width: '100%', 
+          boxSizing: 'border-box',
           zIndex: 10000, 
           backgroundColor: 'black', 
           padding: '12px 40px',
@@ -126,7 +127,7 @@ const App = () => {
                 style={{
                   position: 'absolute',
                   top: 'calc(100% + 12px)',
-                  right: '-40px',
+                  right: 0,
                   backgroundColor: 'black',
                   padding: '24px 40px',
                   display: 'flex',

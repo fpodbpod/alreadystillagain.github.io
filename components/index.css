@@ -59,7 +59,7 @@ body {
     height: auto !important;
     aspect-ratio: 4 / 3;
     max-height: calc(100vh - 50px);
-    transform: translateX(30px);
+    transform: translateX(10px);
   }
 
   .watch-tv-video-layer {

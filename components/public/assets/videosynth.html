@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Video Synthesizer Project</title>
+    
+    <style>
+        /* CSS: Setup for full-screen canvas and sidebar controls (omitted for brevity, assume similar to previous) */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            background-color: #000;
+            color: #ddd; 
+            font-family: Arial, sans-serif; 
+        }
+
+        #synthCanvas {
+            display: block;
+            flex-grow: 1; 
+            background-color: #111;
+        }
+
+        .controls-sidebar { 
+            width: 250px; 
+            padding: 10px; 
+            overflow-y: auto; 
+            box-sizing: border-box; 
+            background: #1a1a1b; 
+            border-left: 1px solid #222; 
+            display: flex;
+            flex-direction: column; 
+            gap: 15px; 
+            flex-shrink: 0; 
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-size: 12px;
+            color: #fff;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 15px;
+        }
+
+        .value-display {
+            font-weight: bold;
+            color: #00ffaa; 
+        }
+
+        /* --- Custom Switch/Toggle Styles (omitted for brevity) --- */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #555;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: #00ffaa;
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        .switch-labels {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .switch-label-left { color: #888; }
+        .switch-label-right { color: #00ffaa; }
+    </style>
+</head>
+<body>
+
+    <canvas id="synthCanvas"></canvas>
+
+    <div class="controls-sidebar">
+        <h2>Synth Controls</h2>
+
+        <div class="control-group">
+            <label for="x_repetition_factor">X Repetition (N=1 to 10): <span id="x_repetition_factor-val" class="value-display">1</span></label>
+            <input type="range" id="x_repetition_factor" min="1" max="10" step="1" value="1">
+        </div>
+        <div class="control-group">
+            <label for="y_repetition_factor">Y Repetition (N=1 to 10): <span id="y_repetition_factor-val" class="value-display">1</span></label>
+            <input type="range" id="y_repetition_factor" min="1" max="10" step="1" value="1">
+        </div>
+
+        <div style="border-bottom: 1px solid #333; padding-bottom: 5px;">
+             <p style="font-size: 14px; margin: 0 0 5px;">Mirror Repetitions</p>
+            <div class="toggle-row">
+                <span>X Mirror Mode:</span>
+                <div class="switch-labels">
+                    <span id="x_mirror_mode-val" class="switch-label-left">Off</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="x_mirror_mode" onchange="updateToggleDisplay('x_mirror_mode', 'Off', 'On')" value="0">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="toggle-row">
+                <span>Y Mirror Mode:</span>
+                <div class="switch-labels">
+                    <span id="y_mirror_mode-val" class="switch-label-left">Off</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="y_mirror_mode" onchange="updateToggleDisplay('y_mirror_mode', 'Off', 'On')" value="0">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div style="border-bottom: 1px solid #333; padding-bottom: 15px;">
+            <p style="font-size: 14px; margin: 0 0 5px;">Primary Oscillation</p>
+            
+            <div class="toggle-row">
+                <span>Waveform:</span>
+                <div class="switch-labels">
+                    <span id="osc_waveform_mode-val" class="switch-label-left">Sine</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="osc_waveform_mode" onchange="updateToggleDisplay('osc_waveform_mode', 'Sine', 'Square')" value="0">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="x_osc_freq">X Osc Freq: <span id="x_osc_freq-val" class="value-display">1.50</span></label>
+                <input type="range" id="x_osc_freq" min="0.1" max="5.0" step="0.01" value="1.5">
+            </div>
+            <div class="control-group">
+                <label for="x_osc_depth">X Osc Depth: <span id="x_osc_depth-val" class="value-display">0.20</span></label>
+                <input type="range" id="x_osc_depth" min="0.0" max="1.0" step="0.01" value="0.2">
+            </div>
+            <div class="control-group">
+                <label for="y_osc_freq">Y Osc Freq: <span id="y_osc_freq-val" class="value-display">1.20</span></label>
+                <input type="range" id="y_osc_freq" min="0.1" max="5.0" step="0.01" value="1.2">
+            </div>
+            <div class="control-group">
+                <label for="y_osc_depth">Y Osc Depth: <span id="y_osc_depth-val" class="value-display">0.25</span></label>
+                <input type="range" id="y_osc_depth" min="0.0" max="1.0" step="0.01" value="0.25">
+            </div>
+        </div>
+
+        <div style="border-bottom: 1px solid #333; padding-bottom: 15px;">
+            <p style="font-size: 14px; margin: 0 0 5px;">Color Modulation</p>
+            
+            <div class="control-group">
+                <label for="color_cycle_speed">Color Cycle Speed (Hz): <span id="color_cycle_speed-val" class="value-display">0.10</span></label>
+                <input type="range" id="color_cycle_speed" min="0.0" max="1.0" step="0.01" value="0.1">
+            </div>
+        </div>
+
+        <div class="toggle-row">
+            <span>Color Mode:</span>
+            <div class="switch-labels">
+                <span id="color_mode-val" class="switch-label-left">B/W</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="color_mode" onchange="updateToggleDisplay('color_mode', 'B/W', 'RGB')" value="1">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="blend_mode">Blend Mode (0/1/2): <span id="blend_mode-val" class="value-display">0</span></label>
+            <input type="range" id="blend_mode" min="0" max="2" step="1" value="0" oninput="updateBlendModeDisplay()">
+        </div>
+        
+        <div class="control-group">
+            <label for="x_position">X Scroll Speed (-1=Left, 1=Right): <span id="x_position-val" class="value-display">0.00</span></label>
+            <input type="range" id="x_position" min="-1.0" max="1.0" step="0.01" value="0.0">
+        </div>
+        <div class="control-group">
+            <label for="y_position">Y Scroll Speed (-1=Top, 1=Bottom): <span id="y_position-val" class="value-display">0.00</span></label>
+            <input type="range" id="y_position" min="-1.0" max="1.0" step="0.01" value="0.0">
+        </div>
+        
+        <div class="control-group">
+            <label for="haze">Trail Persistence (0=Clear, 1=Heavy Haze): <span id="haze-val" class="value-display">0.950</span></label>
+            <input type="range" id="haze" min="0.0" max="1.0" step="0.001" value="0.95">
+        </div>
+
+        <div class="control-group">
+            <label for="size_osc_speed">Size Oscillation Speed (min 0.0): <span id="size_osc_speed-val" class="value-display">0.80</span></label>
+            <input type="range" id="size_osc_speed" min="0.0" max="5.0" step="0.01" value="0.8">
+        </div>
+
+        <div class="control-group">
+            <label for="min_radius">Min Point Size (1 to 200): <span id="min_radius-val" class="value-display">5</span></label>
+            <input type="range" id="min_radius" min="1" max="200" step="1" value="5">
+        </div>
+        <div class="control-group">
+            <label for="max_radius">Max Point Size: <span id="max_radius-val" class="value-display">15</span></label>
+            <input type="range" id="max_radius" min="5" max="300" step="1" value="15">
+        </div>
+
+        <div class="toggle-row" style="padding-top: 5px; border-top: 1px solid #333;">
+            <span>Point Shape:</span>
+            <div class="switch-labels">
+                <span id="point_shape-val" class="switch-label-left">Circle</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="point_shape" onchange="updateToggleDisplay('point_shape', 'Circle', 'Square')" value="0">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="thickness">Line Width Factor (0=Thin, 1=Thick): <span id="thickness-val" class="value-display">0.50</span></label>
+            <input type="range" id="thickness" min="0.0" max="1.0" step="0.01" value="0.5">
+        </div>
+
+        <div class="control-group">
+            <label for="multiples">Number of Echoes: <span id="multiples-val" class="value-display">5</span></label>
+            <input type="range" id="multiples" min="1" max="20" step="1" value="5">
+        </div>
+
+        <div class="control-group">
+            <label for="phase_offset">Phase Offset: <span id="phase_offset-val" class="value-display">0.20</span></label>
+            <input type="range" id="phase_offset" min="0.0" max="1.0" step="0.01" value="0.2">
+        </div>
+    </div>
+
+    <script>
+        // JavaScript: Initialization and Animation Loop
+        const canvas = document.getElementById('synthCanvas');
+        const ctx = canvas.getContext('2d');
+        let t = 0; // Global time variable
+        let t_size = 0; // Separate time variable for size oscillation
+        
+        // SAFETY CONSTANTS
+        const MAX_ECHO_SHIFT = 200; 
+        const PI2 = Math.PI * 2;
+        const SCREEN_DEPTH_FACTOR = 0.5; 
+
+        // --- MODULO FUNCTION FOR CORRECT WRAPAROUND ---
+        function mod(a, n) {
+            return (a % n + n) % n;
+        }
+
+        // --- Helper Functions ---
+        function getVal(id) {
+            const el = document.getElementById(id);
+            if (!el) return 0;
+            if (el.type === 'checkbox') {
+                return el.checked ? 1 : 0;
+            }
+            return parseFloat(el.value);
+        }
+
+        function getBlendModeText(value) {
+            switch(value) {
+                case 0: return 'Source Over (Default)';
+                case 1: return 'Lighter (Additive)';
+                case 2: return 'Difference (Subtractive)';
+                default: return 'Source Over (Default)';
+            }
+        }
+
+        function updateBlendModeDisplay() {
+            const el = document.getElementById('blend_mode');
+            const valDisplay = document.getElementById('blend_mode-val');
+            if (el && valDisplay) {
+                const value = parseInt(el.value);
+                valDisplay.textContent = `${value} (${getBlendModeText(value).split(' ')[0]})`;
+            }
+        }
+
+        function updateDisplay(id) {
+            const el = document.getElementById(id);
+            const valDisplay = document.getElementById(id + '-val');
+            if (id === 'blend_mode') {
+                updateBlendModeDisplay();
+                return;
+            }
+
+            if (el && valDisplay && el.type === 'range') {
+                let precision = 0;
+                if (id.includes('haze')) { 
+                    precision = 3; 
+                } else if (id.includes('factor') || id.includes('radius') || id === 'multiples') {
+                    precision = 0;
+                } else { 
+                    precision = 2;
+                }
+                valDisplay.textContent = parseFloat(el.value).toFixed(precision);
+            }
+        }
+        
+        function updateToggleDisplay(id, labelOff, labelOn) {
+            const el = document.getElementById(id);
+            const valDisplay = document.getElementById(id + '-val');
+            if (el && valDisplay) {
+                const isChecked = el.checked;
+                valDisplay.textContent = isChecked ? labelOn : labelOff;
+                valDisplay.classList.toggle('switch-label-right', isChecked);
+                valDisplay.classList.toggle('switch-label-left', !isChecked);
+                el.value = isChecked ? 1 : 0;
+            }
+        }
+
+        document.querySelectorAll('input[type="range"]').forEach(input => {
+            updateDisplay(input.id);
+            input.addEventListener('input', () => updateDisplay(input.id));
+        });
+        
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            let labelOff, labelOn;
+            
+            if (checkbox.id.includes('mirror_mode')) {
+                labelOff = 'Off'; labelOn = 'On';
+            } else if (checkbox.id === 'color_mode') {
+                labelOff = 'B/W'; labelOn = 'RGB';
+            } else if (checkbox.id === 'point_shape') {
+                labelOff = 'Circle'; labelOn = 'Square';
+            } else if (checkbox.id === 'osc_waveform_mode') {
+                labelOff = 'Sine'; labelOn = 'Square';
+            }
+            
+            checkbox.checked = checkbox.value === '1';
+            
+            updateToggleDisplay(checkbox.id, labelOff, labelOn);
+        });
+
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth - 250; 
+            canvas.height = window.innerHeight;
+            
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function draw() {
+            try {
+                // 1. Get Control Values
+                const xRepetitionFactor = Math.floor(getVal('x_repetition_factor')); 
+                const yRepetitionFactor = Math.floor(getVal('y_repetition_factor')); 
+                const xMirrorMode = getVal('x_mirror_mode'); 
+                const yMirrorMode = getVal('y_mirror_mode'); 
+                const colorMode = getVal('color_mode');     
+                const oscWaveformMode = getVal('osc_waveform_mode'); 
+                const blendMode = Math.floor(getVal('blend_mode')); // Get 0, 1, or 2
+                
+                const hazeControl = getVal('haze'); 
+                const xScrollSpeed = getVal('x_position'); 
+                const yScrollSpeed = getVal('y_position'); 
+                
+                const colorCycleSpeed = getVal('color_cycle_speed'); 
+                
+                const sizeOscSpeed = getVal('size_osc_speed'); 
+                const thickness = getVal('thickness'); 
+                const multiples = getVal('multiples');
+                const phaseOffset = getVal('phase_offset');
+                const pointShape = getVal('point_shape'); 
+                
+                // OSCILLATOR VALUES
+                const xOscFreq = getVal('x_osc_freq');
+                const xOscDepth = getVal('x_osc_depth');
+                const yOscFreq = getVal('y_osc_freq');
+                const yOscDepth = getVal('y_osc_depth');
+
+                // POINT SIZE
+                const minPointSize = getVal('min_radius');
+                const maxPointSize = getVal('max_radius');
+                const pointAmplitude = (maxPointSize - minPointSize) / 2;
+                const centerPointSize = minPointSize + pointAmplitude; 
+                
+                // 2. Update Time
+                t += 0.01; 
+                t_size += 0.01 * sizeOscSpeed; 
+
+                // 3. Clear the Canvas (The Trail/Haze Effect)
+                const alphaClear = 1.0 - hazeControl; 
+                ctx.fillStyle = `rgba(0, 0, 0, ${alphaClear})`;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // --- Set Global Composite Operation (Blend Mode) ---
+                if (blendMode === 1) {
+                    ctx.globalCompositeOperation = 'lighter'; 
+                } else if (blendMode === 2) {
+                    ctx.globalCompositeOperation = 'difference'; // Subtractive/NAND-like effect
+                } else {
+                    ctx.globalCompositeOperation = 'source-over'; 
+                }
+                // ---------------------------------------------------------
+
+                // 4. SCROLL RATE CALCULATION
+                const totalPatternsX = Math.max(1, xRepetitionFactor);
+                const totalPatternsY = Math.max(1, yRepetitionFactor);
+                const totalWidth = canvas.width;
+                const totalHeight = canvas.height;
+                
+                // --- SCROLL RATE: 10X FASTER ---
+                const scrollScale = 150; 
+                const scrollRateX = xScrollSpeed * scrollScale;
+                const scrollRateY = yScrollSpeed * scrollScale;
+                // -----------------------------
+
+                // LFO/MODULATION VALUES (Position LFOs are fixed to zero)
+                const lfoValueX = 0;
+                const lfoValueY = 0;
+                const scaledLfoDepthX = 0;
+                const scaledLfoDepthY = 0;
+
+                // Point Size Oscillation based on t_size
+                const sizeOscValue = Math.sin(t_size * PI2 * 0.5);
+                
+                // --- Waveform Function Selection ---
+                let waveformFunc;
+                if (oscWaveformMode === 1) {
+                    waveformFunc = (time, freq, phase) => {
+                        return (Math.sin(time * freq + phase * PI2) >= 0) ? 1 : -1;
+                    };
+                } else {
+                    waveformFunc = (time, freq, phase) => {
+                        return Math.sin(time * freq + phase * PI2);
+                    };
+                }
+
+
+                // --- OUTERMOST LOOP: Y-AXIS REPETITION (k) ---
+                for (let k = 0; k < totalPatternsY; k++) { 
+                    
+                    const mirrorFactorY = (yMirrorMode === 1 && k % 2 === 1) ? -1 : 1; 
+
+                    let spatialY = totalHeight / 2;
+                    if (totalPatternsY > 1) {
+                        const normalizedPos = k / (totalPatternsY - 1);
+                        const edgePadding = 0.1; 
+                        const drawableHeight = totalHeight * (1 - edgePadding * 2);
+                        spatialY = (totalHeight * edgePadding) + (normalizedPos * drawableHeight);
+                    }
+                    
+                    // Base Pattern Y position with scrolling
+                    const scrolledBaseY = mod(spatialY + t * scrollRateY, totalHeight);
+                    
+                    const lfoShiftY = lfoValueY * scaledLfoDepthY * totalHeight * 0.5;
+                    const centerPointY_SCROLLED = scrolledBaseY + lfoShiftY;
+
+
+                    // --- INNER LOOP: X-AXIS REPETITION (j) ---
+                    for (let j = 0; j < totalPatternsX; j++) {
+                        
+                        const mirrorFactorX = (xMirrorMode === 1 && j % 2 === 1) ? -1 : 1; 
+
+                        let spatialX = totalWidth / 2; 
+                        if (totalPatternsX > 1) {
+                            const normalizedPos = j / (totalPatternsX - 1);
+                            const edgePadding = 0.1;
+                            const drawableWidth = totalWidth * (1 - edgePadding * 2);
+                            spatialX = (totalWidth * edgePadding) + (normalizedPos * drawableWidth);
+                        }
+                        
+                        // Base Pattern X position with scrolling
+                        const scrolledBaseX = mod(spatialX + t * scrollRateX, totalWidth);
+                        
+                        const lfoShiftX = lfoValueX * scaledLfoDepthX * totalWidth * 0.25;
+                        const centerPointX_SCROLLED = scrolledBaseX + lfoShiftX;
+
+                        
+                        // --- SEAMLESS TILING FIX: Iterate through adjacent screen-wraps (-1, 0, 1) ---
+                        for (let repeatShiftX = -1; repeatShiftX <= 1; repeatShiftX++) {
+                            for (let repeatShiftY = -1; repeatShiftY <= 1; repeatShiftY++) {
+                                
+                                
+                                // --- INMOST LOOP: ECHOES (i) ---
+                                for (let i = 0; i < multiples; i++) {
+                                    
+                                    const phase = i * phaseOffset; 
+                                    
+                                    // 5. PRIMARY X/Y OSCILLATION CALCULATION (Grid Movement)
+                                    
+                                    const xOscValue = waveformFunc(t, xOscFreq, phase);
+                                    const xOscShift = xOscValue * xOscDepth * totalWidth * SCREEN_DEPTH_FACTOR * mirrorFactorX; 
+
+                                    const yOscValue = waveformFunc(t, yOscFreq, phase);
+                                    const yOscShift = yOscValue * yOscDepth * totalHeight * SCREEN_DEPTH_FACTOR * mirrorFactorY; 
+
+                                    // Echo Trail Shifts
+                                    const horizontalEchoSpread = i * phaseOffset * xScrollSpeed;
+                                    const horizontalEchoShift = horizontalEchoSpread * MAX_ECHO_SHIFT;
+                                    
+                                    const verticalEchoSpread = i * phaseOffset * yScrollSpeed;
+                                    const verticalEchoShift = verticalEchoSpread * MAX_ECHO_SHIFT;
+                                    
+                                    // Final Position = Scrolled Base + Oscillation + Echo Shift + Seamless Wrap Shift
+                                    let centerX = centerPointX_SCROLLED + xOscShift + horizontalEchoShift; 
+                                    let centerY = centerPointY_SCROLLED + yOscShift + verticalEchoShift;
+
+                                    // Apply the shift for the adjacent copies
+                                    centerX += repeatShiftX * totalWidth;
+                                    centerY += repeatShiftY * totalHeight;
+
+                                    // Point Size Oscillation 
+                                    const pointSize = centerPointSize + pointAmplitude * sizeOscValue;
+                                    
+                                    // --- COLOR CALCULATION ---
+                                    let hue = (t * 5 * colorCycleSpeed + phase * 50 + j * 30 + k * 50) % 360; 
+                                    
+                                    if (hue < 0) hue += 360;
+
+                                    let strokeStyle;
+                                    
+                                    if (colorMode === 1) { 
+                                        strokeStyle = `hsl(${hue}, 100%, 70%)`;
+                                    } else { 
+                                        const lightness = 95; 
+                                        strokeStyle = `hsl(0, 0%, ${lightness}%)`; 
+                                    }
+                                    // --- END COLOR CALCULATION ---
+
+                                    // 6. DRAWING
+                                    
+                                    ctx.strokeStyle = strokeStyle;
+                                    ctx.lineWidth = 0.5 + thickness * 159.5; // NEW: Max thickness is now 160 (8x old max 20)
+                                    ctx.globalAlpha = 1.0; 
+
+                                    // --- SHAPE SWITCH LOGIC ---
+                                    ctx.beginPath();
+                                    if (pointShape === 0) {
+                                        // Draw CIRCLE (Point)
+                                        ctx.arc(centerX, centerY, pointSize, 0, PI2);
+                                    } else {
+                                        // Draw SQUARE (Point)
+                                        const halfSize = pointSize; 
+                                        ctx.rect(centerX - halfSize, centerY - halfSize, 2 * halfSize, 2 * halfSize);
+                                    }
+                                    
+                                    ctx.stroke();
+
+                                } // End of Echo Loop (i)
+                            } // End of Seamless Y Shift Loop (repeatShiftY)
+                        } // End of Seamless X Shift Loop (repeatShiftX)
+                    } // End of X Repetition Loop (j)
+                } // End of Y Repetition Loop (k)
+                
+                // Reset blend mode for cleanup
+                ctx.globalCompositeOperation = 'source-over';
+
+
+            } catch (e) {
+                console.error("Critical Drawing Error:", e);
+            }
+
+            // 7. Request Next Frame
+            requestAnimationFrame(draw);
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (canvas && ctx) {
+                window.addEventListener('resize', resizeCanvas); 
+                resizeCanvas(); 
+                // Initialize blend mode text display
+                updateBlendModeDisplay(); 
+                draw(); 
+            } else {
+                console.error("Canvas element or context not found. Check HTML ID.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -48,7 +48,7 @@ const App = () => {
   // Update document title based on current section
   React.useEffect(() => {
     const baseUrl = 'alreadystillagain.com'; // Assuming this is your base domain
-    const pathSegment = currentSection === 'home' ? '' : `/${currentSection.replace(/\s+/g, '')}`;
+    const pathSegment = currentSection === 'home' ? '' : `/${currentSection.toLowerCase().replace(/\s+/g, '')}`;
     document.title = `${baseUrl}${pathSegment}`;
   }, [currentSection]);
 

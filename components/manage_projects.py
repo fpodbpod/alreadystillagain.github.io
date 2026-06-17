@@ -10,8 +10,10 @@ from urllib.parse import unquote
 # --- CONFIGURATION ---
 # These paths ensure the script knows exactly where your project lives
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Standard Vite projects look for a 'public' folder at the project root
+ROOT_DIR = os.path.dirname(BASE_DIR)
 PROJECTS_JS = os.path.join(BASE_DIR, "projects.js")
-ASSETS_DIR = os.path.join(BASE_DIR, "public", "assets")
+ASSETS_DIR = os.path.join(ROOT_DIR, "public", "assets")
 
 class ProjectManager:
     def __init__(self, root):
@@ -235,9 +237,10 @@ class ProjectManager:
             elif os.path.exists(v_val):
                 local_media_source = v_val
             
-            public_dir = os.path.join(BASE_DIR, "public")
-            if local_media_source and local_media_source.startswith(public_dir):
-                processed_media_url = local_media_source.replace(public_dir, "").replace("\\", "/").lstrip("/")
+            # Pointing to the root public directory where the build tool expects assets
+            public_dir_root = os.path.join(ROOT_DIR, "public")
+            if local_media_source and local_media_source.startswith(public_dir_root):
+                processed_media_url = local_media_source.replace(public_dir_root, "").replace("\\", "/").lstrip("/")
             elif local_media_source and not local_media_source.startswith('http'):
                 # Local file outside the project - copy it to assets
                 base = os.path.basename(local_media_source)
@@ -256,11 +259,11 @@ class ProjectManager:
             elif self.editing_index is not None:
                 existing = self.projects[self.editing_index]
                 t_url = existing.get('thumbnail', '')
-                if t_url.startswith('/assets/') and not os.path.basename(t_url).startswith('thumb_'):
-                    p = os.path.join(public_dir, t_url.lstrip('/'))
+                if 'assets/' in t_url and not os.path.basename(t_url).startswith('thumb_'):
+                    p = os.path.join(public_dir_root, t_url.lstrip('/'))
                     if os.path.exists(p): thumb_src = p
-                elif m_type == "image" and existing.get('imageUrl', '').startswith('/assets/'):
-                    p = os.path.join(public_dir, existing['imageUrl'].lstrip('/'))
+                elif m_type == "image" and 'assets/' in existing.get('imageUrl', ''):
+                    p = os.path.join(public_dir_root, existing['imageUrl'].lstrip('/'))
                     if os.path.exists(p): thumb_src = p
 
             final_thumb_url = ""

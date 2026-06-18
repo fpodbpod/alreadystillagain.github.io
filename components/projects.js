@@ -27,15 +27,6 @@ export const projects = [
     pages: ["recent work", "still"]
   },
   {
-    id: "1201108625",
-    type: "video",
-    title: "Eckley Sketch, 2024",
-    thumbnail: "/assets/thumb_1201108625.jpg",
-    vimeoId: "1201108625",
-    description: "An introspective and visceral exploration of the light, sound, texture, and history of Eckley Pier on the Carquinez Straight, in Contra Costa County, California.",
-    pages: ["recent work", "watch tv"]
-  },
-  {
     id: "1201307921",
     type: "video",
     title: "I",
@@ -295,6 +286,15 @@ export const projects = [
     vimeoId: "1202245036",
     description: "Gongs designed to resonate with feedback loops, via transducers and piezo disks. Through this feedback, the listener is meant to experience a kind of benevolent, meditative state along with the hyper-technological sonic drone experience.",
     pages: ["recent work"]
+  },
+  {
+    id: "1201108625",
+    type: "video",
+    title: "Eckley Sketch, 2024",
+    thumbnail: "/assets/thumb_1201108625.jpg",
+    vimeoId: "1201108625",
+    description: "An introspective and visceral exploration of the light, sound, texture, and history of Eckley Pier on the Carquinez Straight, in Contra Costa County, California.",
+    pages: ["recent work", "watch tv"]
   },
   {
     id: "1201963292",

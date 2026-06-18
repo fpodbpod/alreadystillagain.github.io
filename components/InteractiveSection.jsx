@@ -10,7 +10,7 @@ const InteractiveSection = ({ projects, onProjectSelect }) => {
       minHeight: 'calc(100vh - 50px)' 
     }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <h2 style={{ 
+        <h2 className="section-title" style={{ 
           fontWeight: '900', 
           textTransform: 'uppercase', 
           letterSpacing: '0.2em', 

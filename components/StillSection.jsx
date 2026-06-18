@@ -6,7 +6,7 @@ const StillSection = ({ projects, onProjectSelect }) => {
   return (
     <div style={{ padding: '100px 40px', backgroundColor: 'white', minHeight: 'calc(100vh - 50px)' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <h2 style={{ fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '40px', marginBottom: '60px' }}>Still</h2>
+        <h2 className="section-title" style={{ fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '40px', marginBottom: '60px' }}>Still</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '40px' }}>
           {items.map(project => (
             <div key={project.id} onClick={() => onProjectSelect(project.id)} style={{ cursor: 'pointer' }}>

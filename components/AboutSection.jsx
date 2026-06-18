@@ -18,7 +18,7 @@ const AboutSection = () => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '80px', alignItems: 'flex-start' }}>
         {/* Artist Statement Section */}
         <div style={{ marginBottom: '0' }}>
-          <h2 style={{ 
+          <h2 className="section-title section-title-large" style={{ 
             fontSize: '60px', 
             fontWeight: '900', 
             textTransform: 'uppercase', 
@@ -67,7 +67,7 @@ const AboutSection = () => {
 
         {/* CV Section */}
         <div style={{ marginBottom: '0' }}>
-          <h2 style={{ 
+          <h2 className="section-title section-title-large" style={{ 
             fontSize: '60px', 
             fontWeight: '900', 
             textTransform: 'uppercase', 
@@ -116,7 +116,7 @@ const AboutSection = () => {
 
         {/* Reach Out Section */}
         <div style={{ marginBottom: '0' }}>
-          <h2 style={{ 
+          <h2 className="section-title section-title-large" style={{ 
             fontSize: '60px', 
             fontWeight: '900', 
             textTransform: 'uppercase', 

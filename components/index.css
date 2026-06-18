@@ -46,6 +46,20 @@ body {
     white-space: nowrap;
   }
 
+  .section-title {
+    font-size: 28px !important;
+    letter-spacing: 0.1em !important;
+    line-height: 1.12;
+    overflow-wrap: normal;
+    word-break: normal;
+    max-width: 100%;
+  }
+
+  .section-title-large {
+    font-size: 34px !important;
+    letter-spacing: 0.1em !important;
+  }
+
   .home-hero-hint {
     top: 184px !important;
     left: 12px !important;

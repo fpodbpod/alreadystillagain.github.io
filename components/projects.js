@@ -331,5 +331,14 @@ export const projects = [
     vimeoId: "1201302427",
     description: "8 channel sampler, using 8 ISD1820 voice chips, with per channel pitch/speed control via photoresistors.",
     pages: ["recent work"]
+  },
+  {
+    id: "1202328171",
+    type: "video",
+    title: "Heaven Is a Target (excerpt), 2025",
+    thumbnail: "/assets/thumb_1202328171.jpeg",
+    vimeoId: "1202328171",
+    description: "",
+    pages: ["recent work", "watch tv"]
   }
 ];

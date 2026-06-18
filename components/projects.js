@@ -78,7 +78,7 @@ export const projects = [
     thumbnail: "/assets/thumb_1202328171.jpeg",
     vimeoId: "1202328171",
     description: "",
-    pages: ["recent work", "watch tv"]
+    pages: ["recent work"]
   },
   {
     id: "video-synthesizer-1",

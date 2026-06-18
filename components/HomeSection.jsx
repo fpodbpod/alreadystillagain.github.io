@@ -56,7 +56,8 @@ const HomeSection = ({ projects, onProjectSelect }) => {
         }} />
       </div>
 
-        <img 
+        <img
+          className="home-hero-image"
           src={`${import.meta.env.BASE_URL}assets/pinksean.gif`}
           alt="alreadystillagain" 
           onClick={playStatement}

@@ -61,11 +61,15 @@ body {
   }
 
   .home-hero-hint {
-    top: 184px !important;
+    top: 188px !important;
     left: 12px !important;
     font-size: 7px !important;
     letter-spacing: 0.14em !important;
     gap: 7px !important;
+  }
+
+  .home-hero-image {
+    transform: translateX(6px);
   }
 
   .watch-tv-frame {

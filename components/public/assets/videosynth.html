@@ -120,6 +120,58 @@
         }
         .switch-label-left { color: #888; }
         .switch-label-right { color: #00ffaa; }
+
+        @media (max-width: 640px) {
+            .controls-sidebar {
+                width: clamp(108px, 34vw, 132px);
+                padding: 6px;
+                gap: 8px;
+            }
+
+            .controls-sidebar h2 {
+                font-size: 13px;
+                margin: 0 0 2px;
+            }
+
+            .control-group label,
+            .toggle-row {
+                font-size: 9px;
+                line-height: 1.15;
+                margin-bottom: 3px;
+            }
+
+            .control-group input[type="range"] {
+                height: 10px;
+            }
+
+            .controls-sidebar p {
+                font-size: 10px !important;
+            }
+
+            .toggle-switch {
+                width: 28px;
+                height: 14px;
+            }
+
+            .toggle-slider {
+                border-radius: 14px;
+            }
+
+            .toggle-slider:before {
+                height: 10px;
+                width: 10px;
+                left: 2px;
+                bottom: 2px;
+            }
+
+            input:checked + .toggle-slider:before {
+                transform: translateX(14px);
+            }
+
+            .switch-labels {
+                gap: 3px;
+            }
+        }
     </style>
 </head>
 <body>

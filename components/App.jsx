@@ -76,6 +76,7 @@ const App = () => {
           left: 0, 
           width: '100%', 
           boxSizing: 'border-box',
+          minHeight: '50px',
           zIndex: 10000, 
           backgroundColor: 'black', 
           padding: '12px 40px',
@@ -295,11 +296,28 @@ const App = () => {
                 )}
 
                 {activeProject?.type === 'image' && (
-                  <div className="flex justify-center items-center bg-black min-h-[400px]">
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'black',
+                      overflow: 'hidden',
+                      maxHeight: 'calc(90vh - 150px)',
+                      width: '100%'
+                    }}
+                  >
                     <img 
                       src={activeProject.imageUrl || activeProject.thumbnail} 
                       alt={activeProject.title}
-                      className="max-w-full max-h-[80vh] object-contain block mx-auto"
+                      style={{
+                        display: 'block',
+                        maxWidth: '100%',
+                        maxHeight: 'calc(90vh - 150px)',
+                        width: 'auto',
+                        height: 'auto',
+                        objectFit: 'contain'
+                      }}
                     />
                   </div>
                 )}

@@ -340,5 +340,14 @@ export const projects = [
     vimeoId: "1201302427",
     description: "8 channel sampler, using 8 ISD1820 voice chips, with per channel pitch/speed control via photoresistors.",
     pages: ["recent work"]
+  },
+  {
+    id: "1204413530",
+    type: "video",
+    title: "Landscaping, Pt. 1, 2026",
+    thumbnail: "assets/thumb_1204413530.png",
+    vimeoId: "1204413530",
+    description: "Live performance of Ciat-Lonbarde Cocoquantus synthesizer.",
+    pages: ["recent work", "watch tv"]
   }
 ];

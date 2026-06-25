@@ -5,7 +5,7 @@ export const projects = [
     title: "Landscaping, Pt. 1, 2026",
     thumbnail: "assets/thumb_1204413530.jpg",
     vimeoId: "1204413530",
-    description: "Live performance of Ciat-Lonbarde Cocoquantus synthesizer.",
+    description: "Live performance on the Ciat-Lonbarde Cocoquantus synthesizer.",
     pages: ["recent work", "watch tv"]
   },
   {

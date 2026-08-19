@@ -259,7 +259,7 @@ class ProjectManager:
             elif self.editing_index is not None:
                 existing = self.projects[self.editing_index]
                 t_url = existing.get('thumbnail', '')
-                if 'assets/' in t_url and not os.path.basename(t_url).startswith('thumb_'):
+                if 'assets/' in t_url:
                     p = os.path.join(public_dir_root, t_url.lstrip('/'))
                     if os.path.exists(p): thumb_src = p
                 elif m_type == "image" and 'assets/' in existing.get('imageUrl', ''):
@@ -270,16 +270,12 @@ class ProjectManager:
             final_full_url = ""
 
             if thumb_src:
-                ext = os.path.splitext(thumb_src)[1]
                 base_name = os.path.basename(thumb_src)
-                if base_name.startswith("thumb_"):
-                    base_name = base_name.replace("thumb_", "")
-                
-                # For videos, name the thumb after the Vimeo ID
-                if m_type == "video" and v_val:
-                    base_name = f"{v_val}{ext}"
 
-                thumb_name = f"thumb_{base_name}"
+                # Preserve the selected thumbnail's filename exactly. The site
+                # should link to assets/123.jpg when the source is named 123.jpg,
+                # rather than silently rewriting it as assets/thumb_123.jpg.
+                thumb_name = base_name
                 os.makedirs(ASSETS_DIR, exist_ok=True)
                 thumb_dest = os.path.join(ASSETS_DIR, thumb_name)
                 full_dest = os.path.join(ASSETS_DIR, base_name)

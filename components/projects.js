@@ -3,7 +3,7 @@ export const projects = [
     id: "1219604795",
     type: "video",
     title: "Ground Hum - Crocker Art Museum Installation",
-    thumbnail: "",
+    thumbnail: "assets/thumb_1219604795.jpg",
     vimeoId: "1219604795",
     description: "24 channel sound and video installationat Crocker Art Museum in Sacramento, California - 30 July, 2026",
     pages: ["recent work", "watch tv"]

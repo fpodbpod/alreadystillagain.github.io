@@ -9,6 +9,15 @@ export const projects = [
     pages: ["recent work", "watch tv"]
   },
   {
+    id: "ground-hum---crocker-art-museum-installation",
+    type: "image",
+    title: "Ground Hum - Crocker Art Museum Installation",
+    thumbnail: "assets/crockerrear.jpeg",
+    imageUrl: "/assets/crockerrear.jpeg",
+    description: "",
+    pages: ["recent work", "still"]
+  },
+  {
     id: "1204413530",
     type: "video",
     title: "Landscaping, Pt. 1, 2026",
@@ -358,14 +367,5 @@ export const projects = [
     vimeoId: "1201302427",
     description: "8 channel sampler, using 8 ISD1820 voice chips, with per channel pitch/speed control via photoresistors.",
     pages: ["recent work"]
-  },
-  {
-    id: "ground-hum---crocker-art-museum-installation",
-    type: "image",
-    title: "Ground Hum - Crocker Art Museum Installation",
-    thumbnail: "",
-    imageUrl: "/assets/crockerrear.jpeg",
-    description: "",
-    pages: ["recent work", "still"]
   }
 ];

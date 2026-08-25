@@ -364,7 +364,7 @@ export const projects = [
     type: "image",
     title: "Ground Hum - Crocker Art Museum Installation",
     thumbnail: "",
-    imageUrl: "crockerrear.jpeg",
+    imageUrl: "/assets/crockerrear.jpeg",
     description: "",
     pages: ["recent work", "still"]
   }

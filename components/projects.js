@@ -358,5 +358,14 @@ export const projects = [
     vimeoId: "1201302427",
     description: "8 channel sampler, using 8 ISD1820 voice chips, with per channel pitch/speed control via photoresistors.",
     pages: ["recent work"]
+  },
+  {
+    id: "ground-hum---crocker-art-museum-installation",
+    type: "image",
+    title: "Ground Hum - Crocker Art Museum Installation",
+    thumbnail: "",
+    imageUrl: "crockerrear.jpeg",
+    description: "",
+    pages: ["recent work", "still"]
   }
 ];
